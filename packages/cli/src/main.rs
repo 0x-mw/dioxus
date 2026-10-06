@@ -16,6 +16,7 @@ mod dx_build_info;
 mod error;
 mod esbuild;
 mod fastfs;
+mod i18n;
 mod logging;
 mod opt;
 mod platform;

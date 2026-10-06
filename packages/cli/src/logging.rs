@@ -30,11 +30,11 @@
 //!
 
 use crate::component::ComponentCommand;
+use crate::i18n::fmt::tr_text_tail;
 use crate::{BundleFormat, CliSettings, Workspace};
-use crate::{Cli, Commands, Verbosity, dx_build_info::GIT_COMMIT_HASH_SHORT, serve::ServeUpdate};
+use crate::{Commands, Verbosity, dx_build_info::GIT_COMMIT_HASH_SHORT, serve::ServeUpdate};
 use anyhow::{Context, Error, Result, bail};
 use cargo_metadata::diagnostic::{Diagnostic, DiagnosticLevel};
-use clap::Parser;
 use dioxus_cli_telemetry::TelemetryEventData;
 use dioxus_dx_wire_format::StructuredOutput;
 use futures_channel::mpsc::{UnboundedReceiver, UnboundedSender};
@@ -133,7 +133,7 @@ impl TraceController {
     pub async fn main(
         run_app: impl FnOnce(Commands, Self) -> Pin<Box<dyn Future<Output = Result<StructuredOutput>>>>,
     ) -> StructuredOutput {
-        let args = Cli::parse();
+        let args = crate::i18n::clap::parse_cli();
         let tui_active = Arc::new(AtomicBool::new(false));
         let is_serve_cmd = matches!(args.action, Commands::Serve(_));
 
@@ -175,7 +175,7 @@ impl TraceController {
         // We complete filter out a few fields that are not relevant to the user, like `dx_src` and `json`
         let fmt_layer = tracing_subscriber::fmt::layer()
             .with_target(false)
-            .fmt_fields(
+            .fmt_fields(crate::i18n::fmt::LocalizedFields(
                 format::debug_fn(move |writer, field, value| {
                     if field.name() == "json" && !args.verbosity.json_output {
                         return Ok(());
@@ -189,10 +189,14 @@ impl TraceController {
                         return Ok(());
                     }
 
+                    if field.name() == "message" && crate::i18n::fmt::translate_message() {
+                        return write!(writer, "{}", tr_text_tail(&format!("{value:?}")));
+                    }
+
                     write!(writer, "{}", format_field(field.name(), value))
                 })
                 .delimited(" "),
-            )
+            ))
             .with_timer(PrettyUptime::default());
 
         // If json output is enabled, we want to format the output as JSON
@@ -646,16 +650,23 @@ impl TraceController {
 
         // re-emit any remaining messages in case they're useful.
         while let Ok(msg) = self.tui_rx.lock().await.try_recv() {
+            let keep_english = matches!(msg.content, TraceContent::Cargo(_))
+                || matches!(msg.source, TraceSrc::App(_) | TraceSrc::Cargo);
             let content = match msg.content {
                 TraceContent::Text(text) => text,
                 TraceContent::Cargo(msg) => msg.message.to_string(),
             };
-            match msg.level {
+            let emit = || match msg.level {
                 Level::ERROR => tracing::error!("{content}"),
                 Level::WARN => tracing::warn!("{content}"),
                 Level::INFO => tracing::info!("{content}"),
                 Level::DEBUG => tracing::debug!("{content}"),
                 Level::TRACE => tracing::trace!("{content}"),
+            };
+            if keep_english {
+                crate::i18n::fmt::untranslated(emit)
+            } else {
+                emit()
             }
         }
 
@@ -692,7 +703,13 @@ impl TraceController {
                     "{ERROR_STYLE}ERROR{ERROR_STYLE:#} {GLOW_STYLE}dx {}{GLOW_STYLE:#}: {}",
                     arg, err_display
                 );
-                eprintln!("\n{message}");
+                // 화면용만 번역한다(StructuredOutput 의 message 는 영어 그대로).
+                let shown = format!(
+                    "{ERROR_STYLE}ERROR{ERROR_STYLE:#} {GLOW_STYLE}dx {}{GLOW_STYLE:#}: {}",
+                    arg,
+                    crate::i18n::tr_error_report(&err_display)
+                );
+                eprintln!("\n{shown}");
                 StructuredOutput::Error { message }
             }
 

@@ -64,7 +64,13 @@ impl Display for IssueReport {
             let hook_info = issue.hook_info();
             let hook_span = hook_info.span;
             let hook_name_span = hook_info.name_span;
-            let error_line = format!("{}: {}", brightred("error"), issue);
+            let issue_text = issue.to_string();
+            let issue_text = if crate::i18n::fmt::translate_message() {
+                crate::i18n::tr_text(&issue_text)
+            } else {
+                std::borrow::Cow::Borrowed(issue_text.as_str())
+            };
+            let error_line = format!("{}: {}", brightred("error"), issue_text);
             writeln!(f, "{}", bold(&error_line))?;
             writeln!(
                 f,

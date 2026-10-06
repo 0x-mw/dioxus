@@ -63,7 +63,9 @@ where
 {
     fn augment_args(cmd: clap::Command) -> clap::Command {
         T::augment_args(cmd).defer(|cmd| {
-            PlatformOverrides::<T>::augment_subcommands(cmd.disable_help_subcommand(true))
+            crate::i18n::clap::localize_deferred(PlatformOverrides::<T>::augment_subcommands(
+                cmd.disable_help_subcommand(true),
+            ))
         })
     }
 
@@ -165,7 +167,7 @@ where
         } else {
             // We use the special `defer` method which lets us recursively call `augment_args` on the inner command
             // and thus `from_arg_matches`
-            cmd.defer(|cmd| U::augment_subcommands(cmd))
+            cmd.defer(|cmd| crate::i18n::clap::localize_deferred(U::augment_subcommands(cmd)))
         }
     }
 

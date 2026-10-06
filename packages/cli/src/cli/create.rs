@@ -268,11 +268,17 @@ pub(crate) async fn check_connectivity() -> Result<()> {
         }
         if x == 0 {
             eprintln!(
-                "{GLOW_STYLE}warning{GLOW_STYLE:#}: Waiting for {LINK_STYLE}https://github.com/dioxuslabs{LINK_STYLE:#}..."
+                "{}",
+                crate::i18n::tr_line(&format!(
+                    "{GLOW_STYLE}warning{GLOW_STYLE:#}: Waiting for {LINK_STYLE}https://github.com/dioxuslabs{LINK_STYLE:#}..."
+                ))
             )
         } else {
             eprintln!(
-                "{GLOW_STYLE}warning{GLOW_STYLE:#}: ({x}/5) Taking a while, maybe your internet is down?"
+                "{}",
+                crate::i18n::tr_line(&format!(
+                    "{GLOW_STYLE}warning{GLOW_STYLE:#}: ({x}/5) Taking a while, maybe your internet is down?"
+                ))
             );
         }
     }

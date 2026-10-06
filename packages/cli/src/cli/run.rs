@@ -141,10 +141,14 @@ impl RunArgs {
                             return Err(err);
                         }
                         BuilderUpdate::StdoutReceived { msg } => {
-                            tracing::info!("[{bundle_format}] {msg}");
+                            crate::i18n::fmt::untranslated(|| {
+                                tracing::info!("[{bundle_format}] {msg}")
+                            });
                         }
                         BuilderUpdate::StderrReceived { msg } => {
-                            tracing::error!("[{bundle_format}] {msg}");
+                            crate::i18n::fmt::untranslated(|| {
+                                tracing::error!("[{bundle_format}] {msg}")
+                            });
                         }
                         BuilderUpdate::ProcessExited { status } => {
                             if !status.success() {

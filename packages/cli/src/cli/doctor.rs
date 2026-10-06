@@ -9,8 +9,8 @@ pub(crate) struct Doctor {}
 
 impl Doctor {
     pub async fn doctor(self) -> Result<StructuredOutput> {
-        let mut rustc_version = "not found".to_string();
-        let mut rustc_sysroot = "not found".to_string();
+        let mut rustc_version = crate::i18n::t("not found").to_string();
+        let mut rustc_sysroot = crate::i18n::t("not found").to_string();
         let mut rustlib = PathBuf::from(".");
         if let Ok(r) = Workspace::get_rustc_sysroot().await {
             rustlib = PathBuf::from(r.as_str()).join("lib").join("rustlib");
@@ -24,12 +24,12 @@ impl Doctor {
         let wasm_opt_location = crate::wasm_opt::installed_location();
         let wasm_opt_message = match wasm_opt_location.clone() {
             Some(path) => path.to_string_lossy().to_string(),
-            None => "not installed".into(),
+            None => crate::i18n::t("not installed").into(),
         };
 
         // wasm-bindgen
-        let mut wbg_version_msg = "automatically managed".to_string();
-        let mut wasm_bindgen_location = "automatically managed".to_string();
+        let mut wbg_version_msg = crate::i18n::t("automatically managed").to_string();
+        let mut wasm_bindgen_location = crate::i18n::t("automatically managed").to_string();
         if let Ok(workspace) = Workspace::current().await {
             let wbg_version = workspace.wasm_bindgen_version();
             if let Some(vers) = &wbg_version {
@@ -64,21 +64,21 @@ impl Doctor {
         let vscode_ext = has_dioxus_ext(".vscode");
         let vscode_ext_msg = match vscode_ext.as_ref() {
             Ok(path) => path.to_string_lossy().to_string(),
-            Err(_) => "not found".to_string(),
+            Err(_) => crate::i18n::t("not found").to_string(),
         };
         let vscode_insiders_ext = has_dioxus_ext(".vscode-insiders");
         let vscode_insiders_ext_msg = match vscode_insiders_ext.as_ref() {
             Ok(path) => path.to_string_lossy().to_string(),
-            Err(_) => "not found".to_string(),
+            Err(_) => crate::i18n::t("not found").to_string(),
         };
         let cursor_ext = has_dioxus_ext(".cursor");
         let cursor_ext_msg = match cursor_ext.as_ref() {
             Ok(path) => path.to_string_lossy().to_string(),
-            Err(_) => "not found".to_string(),
+            Err(_) => crate::i18n::t("not found").to_string(),
         };
 
         // Tailwind
-        let mut tailwindcss = "not found".to_string();
+        let mut tailwindcss = crate::i18n::t("not found").to_string();
         if let Ok(path) = crate::tailwind::TailwindCli::v3().get_binary_path() {
             tailwindcss = path.display().to_string();
         }
@@ -86,11 +86,11 @@ impl Doctor {
             tailwindcss = path.display().to_string();
         }
 
-        let mut adb = "not found".to_string();
-        let mut ndk = "not found".to_string();
-        let mut sdk = "not found".to_string();
-        let mut java_home = "not found".to_string();
-        let mut emulator = "not found".to_string();
+        let mut adb = crate::i18n::t("not found").to_string();
+        let mut ndk = crate::i18n::t("not found").to_string();
+        let mut sdk = crate::i18n::t("not found").to_string();
+        let mut java_home = crate::i18n::t("not found").to_string();
+        let mut emulator = crate::i18n::t("not found").to_string();
         if let Some(tools) = AndroidTools::current() {
             if tools.adb.exists() {
                 adb = tools.adb.display().to_string();
@@ -112,8 +112,8 @@ impl Doctor {
             }
         };
 
-        let mut simulator_location = "not found".to_string();
-        let mut xcode_install = "not found".to_string();
+        let mut simulator_location = crate::i18n::t("not found").to_string();
+        let mut xcode_install = crate::i18n::t("not found").to_string();
         if let Some(xcode) = Workspace::get_xcode_path().await {
             let sim_location = xcode.join("Applications").join("Simulator.app");
             if sim_location.exists() {
@@ -124,11 +124,11 @@ impl Doctor {
             }
         }
 
-        let mut security_cli_path = "not found".to_string();
-        let mut codesign_path = "not found".to_string();
-        let mut xcode_select_path = "not found".to_string();
-        let mut xcrun_path = "not found".to_string();
-        let mut ranlib_path = "not found".to_string();
+        let mut security_cli_path = crate::i18n::t("not found").to_string();
+        let mut codesign_path = crate::i18n::t("not found").to_string();
+        let mut xcode_select_path = crate::i18n::t("not found").to_string();
+        let mut xcrun_path = crate::i18n::t("not found").to_string();
+        let mut ranlib_path = crate::i18n::t("not found").to_string();
         if let Ok(path) = which::which("security") {
             security_cli_path = path.display().to_string();
         }
@@ -184,9 +184,9 @@ impl Doctor {
         }
 
         // Rust tool paths
-        let mut rustc_path = "not found".to_string();
-        let mut cargo_path = "not found".to_string();
-        let mut cc_path = "not found".to_string();
+        let mut rustc_path = crate::i18n::t("not found").to_string();
+        let mut cargo_path = crate::i18n::t("not found").to_string();
+        let mut cc_path = crate::i18n::t("not found").to_string();
         if let Ok(path) = which::which("rustc") {
             rustc_path = path.display().to_string();
         }
@@ -203,7 +203,9 @@ impl Doctor {
         // -
         use crate::styles::*;
         println!(
-            r#"{LINK_STYLE}Setup{LINK_STYLE:#}
+            "{}",
+            crate::i18n::tr_text(&format!(
+                r#"{LINK_STYLE}Setup{LINK_STYLE:#}
  {GLOW_STYLE}Web{GLOW_STYLE:#}: wasm-bindgen, wasm-opt, and TailwindCSS are downloaded automatically
  {GLOW_STYLE}iOS{GLOW_STYLE:#}: Install iOS SDK and developer tools and through XCode
  {GLOW_STYLE}Android{GLOW_STYLE:#}: Install Android Studio, NDK, and then set ANDROID_HOME and ANDROID_NDK_HOME
@@ -260,6 +262,7 @@ impl Doctor {
 Get help: {LINK_STYLE}https://discord.gg/XgGxMSkvUM{LINK_STYLE:#}
 More info: {LINK_STYLE}https://dioxuslabs.com/learn/0.7/{LINK_STYLE:#}
 "#
+            ))
         );
 
         Ok(StructuredOutput::Success)

@@ -112,7 +112,7 @@ fn refactor_file(
     } else if let Err(e) = fs::write(&file, out) {
         tracing::error!("failed to write formatted content to file: {e}",);
     } else {
-        println!("formatted {file}");
+        println!("{}", crate::i18n::tr_line(&format!("formatted {file}")));
     }
 
     Ok(())

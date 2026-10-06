@@ -200,16 +200,28 @@ impl ComponentCommand {
                 // If we created a new components module, print instructions about the final setup steps required
                 if new_components_module {
                     println!(
-                        "Created new components module at {}.",
-                        components_root.display()
+                        "{}",
+                        crate::i18n::tr_line(&format!(
+                            "Created new components module at {}.",
+                            components_root.display()
+                        ))
                     );
-                    println!("To finish setting up components, you will need to:");
                     println!(
-                        "- manually reference the module by adding `mod components;` to your `main.rs` file"
+                        "{}",
+                        crate::i18n::tr_line("To finish setting up components, you will need to:")
+                    );
+                    println!(
+                        "{}",
+                        crate::i18n::tr_line(
+                            "- manually reference the module by adding `mod components;` to your `main.rs` file"
+                        )
                     );
                     if registry.is_default() {
                         println!(
-                            "- add a reference to `asset!(\"/assets/dx-components-theme.css\")` as a stylesheet in your app"
+                            "{}",
+                            crate::i18n::tr_line(
+                                "- add a reference to `asset!(\"/assets/dx-components-theme.css\")` as a stylesheet in your app"
+                            )
                         );
                     }
                 }
@@ -369,7 +381,7 @@ impl RemoteComponentRegistry {
                 let git = git.clone();
                 let repo_dir = repo_dir.clone();
                 move || {
-                    println!("Downloading {git}...");
+                    println!("{}", crate::i18n::tr_line(&format!("Downloading {git}...")));
 
                     // Clone the repo
                     let repo = Repository::clone(&git, repo_dir)?;

@@ -124,7 +124,10 @@ impl Bundle {
             }
         }
 
-        println!("Bundled {} bundles:", bundles.len());
+        println!(
+            "{}",
+            crate::i18n::tr_line(&format!("Bundled {} bundles:", bundles.len()))
+        );
         for bundle_path in bundles.iter() {
             println!("{}", bundle_path.absolutize().unwrap().display());
         }

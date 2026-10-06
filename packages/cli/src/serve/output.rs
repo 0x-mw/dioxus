@@ -484,8 +484,8 @@ impl Output {
             Line::from(vec![
                 " ".dark_gray(),
                 match self.more_modal_open {
-                    true => "/:more".light_yellow(),
-                    false => "/:more".dark_gray(),
+                    true => crate::i18n::t("/:more").light_yellow(),
+                    false => crate::i18n::t("/:more").dark_gray(),
                 },
                 " ".dark_gray(),
             ])
@@ -532,7 +532,7 @@ impl Output {
             frame,
             app_progress,
             client.compile_progress(),
-            "App:    ",
+            &crate::i18n::t_pad("App:    "),
             state,
             client.compile_duration(),
         );
@@ -542,7 +542,7 @@ impl Output {
                 frame,
                 second_progress,
                 state.runner.server_compile_progress(),
-                "Server: ",
+                &crate::i18n::t_pad("Server: "),
                 state,
                 client.compile_duration(),
             );
@@ -551,75 +551,85 @@ impl Output {
                 frame,
                 second_progress,
                 client.bundle_progress(),
-                "Bundle: ",
+                &crate::i18n::t_pad("Bundle: "),
                 state,
                 client.bundle_duration(),
             );
         }
 
-        let mut lines = vec!["Status:  ".white()];
+        let mut lines = vec![Span::raw(crate::i18n::t_pad("Status:  ")).white()];
         match &client.stage {
-            BuildStage::Initializing => lines.push("Initializing".yellow()),
+            BuildStage::Initializing => lines.push(crate::i18n::t("Initializing").yellow()),
             BuildStage::Starting { patch, .. } => {
                 if *patch {
-                    lines.push("Hot-patching...".yellow())
+                    lines.push(crate::i18n::t("Hot-patching...").yellow())
                 } else {
-                    lines.push("Starting build".yellow())
+                    lines.push(crate::i18n::t("Starting build").yellow())
                 }
             }
-            BuildStage::InstallingTooling => lines.push("Installing tooling".yellow()),
+            BuildStage::InstallingTooling => {
+                lines.push(crate::i18n::t("Installing tooling").yellow())
+            }
             BuildStage::Compiling {
                 current,
                 total,
                 krate,
                 ..
             } => {
-                lines.push("Compiling ".yellow());
+                lines.push(Span::raw(crate::i18n::t_pad("Compiling ")).yellow());
                 lines.push(format!("{current}/{total} ").gray());
                 lines.push(krate.as_str().dark_gray())
             }
-            BuildStage::OptimizingWasm => lines.push("Optimizing wasm".yellow()),
-            BuildStage::SplittingBundle => lines.push("Splitting bundle".yellow()),
-            BuildStage::CompressingAssets => lines.push("Compressing assets".yellow()),
-            BuildStage::RunningBindgen => lines.push("Running wasm-bindgen".yellow()),
-            BuildStage::RunningGradle => lines.push("Running gradle assemble".yellow()),
+            BuildStage::OptimizingWasm => lines.push(crate::i18n::t("Optimizing wasm").yellow()),
+            BuildStage::SplittingBundle => lines.push(crate::i18n::t("Splitting bundle").yellow()),
+            BuildStage::CompressingAssets => {
+                lines.push(crate::i18n::t("Compressing assets").yellow())
+            }
+            BuildStage::RunningBindgen => {
+                lines.push(crate::i18n::t("Running wasm-bindgen").yellow())
+            }
+            BuildStage::RunningGradle => {
+                lines.push(crate::i18n::t("Running gradle assemble").yellow())
+            }
             BuildStage::CompilingNativePlugins { detail } => {
                 // detail is "Swift build: name" — split into label (yellow) and name (white)
                 if let Some((label, name)) = detail.split_once(": ") {
-                    lines.push(format!("{label}: ").yellow());
+                    lines.push(format!("{}: ", crate::i18n::tr_line(label)).yellow());
                     lines.push(name.white());
                 } else {
-                    lines.push(detail.clone().yellow());
+                    lines.push(crate::i18n::tr_line(detail).into_owned().yellow());
                 }
             }
-            BuildStage::CodeSigning => lines.push("Code signing app".yellow()),
-            BuildStage::Bundling => lines.push("Bundling app".yellow()),
+            BuildStage::CodeSigning => lines.push(crate::i18n::t("Code signing app").yellow()),
+            BuildStage::Bundling => lines.push(crate::i18n::t("Bundling app").yellow()),
             BuildStage::CopyingAssets {
                 current,
                 total,
                 path,
             } => {
-                lines.push("Copying asset ".yellow());
+                lines.push(Span::raw(crate::i18n::t_pad("Copying asset ")).yellow());
                 lines.push(format!("{current}/{total} ").gray());
                 if let Some(name) = path.file_name().and_then(|f| f.to_str()) {
                     lines.push(name.dark_gray())
                 }
             }
             BuildStage::Success => {
-                lines.push("Serving ".yellow());
+                lines.push(Span::raw(crate::i18n::t_pad("Serving ")).yellow());
                 lines.push(client.build.executable_name().white());
                 lines.push(" 🚀 ".green());
                 if let Some(comp_time) = client.total_build_time() {
                     lines.push(format!("{:.1}s", comp_time.as_secs_f32()).dark_gray());
                 }
             }
-            BuildStage::Failed => lines.push("Failed".red()),
-            BuildStage::Aborted => lines.push("Aborted".red()),
-            BuildStage::Restarting => lines.push("Restarting".yellow()),
-            BuildStage::Linking => lines.push("Linking".yellow()),
-            BuildStage::Hotpatching => lines.push("Hot-patching...".yellow()),
-            BuildStage::ExtractingAssets => lines.push("Extracting assets".yellow()),
-            BuildStage::Prerendering => lines.push("Pre-rendering...".yellow()),
+            BuildStage::Failed => lines.push(crate::i18n::t("Failed").red()),
+            BuildStage::Aborted => lines.push(crate::i18n::t("Aborted").red()),
+            BuildStage::Restarting => lines.push(crate::i18n::t("Restarting").yellow()),
+            BuildStage::Linking => lines.push(crate::i18n::t("Linking").yellow()),
+            BuildStage::Hotpatching => lines.push(crate::i18n::t("Hot-patching...").yellow()),
+            BuildStage::ExtractingAssets => {
+                lines.push(crate::i18n::t("Extracting assets").yellow())
+            }
+            BuildStage::Prerendering => lines.push(crate::i18n::t("Pre-rendering...").yellow()),
             _ => {}
         };
 
@@ -711,10 +721,10 @@ impl Output {
         let client = &state.runner.client();
         frame.render_widget(
             Paragraph::new(Line::from(vec![
-                "Platform: ".gray(),
+                Span::raw(crate::i18n::t_pad("Platform: ")).gray(),
                 client.build.bundle.expected_name().yellow(),
                 if state.runner.is_fullstack() {
-                    " + fullstack".yellow()
+                    Span::raw(crate::i18n::t_pad(" + fullstack")).yellow()
                 } else {
                     " ".dark_gray()
                 },
@@ -723,12 +733,16 @@ impl Output {
         );
 
         let (label, indicator) = match state.runner.hotreload_mode {
-            HotReloadMode::Hotpatch => ("hot-patching".yellow(), " ✓".yellow()),
-            HotReloadMode::RsxOnly => ("rsx and assets".yellow(), " ~".yellow()),
-            HotReloadMode::Disabled => ("disabled".dark_gray(), " ✗".dark_gray()),
+            HotReloadMode::Hotpatch => (crate::i18n::t("hot-patching").yellow(), " ✓".yellow()),
+            HotReloadMode::RsxOnly => (crate::i18n::t("rsx and assets").yellow(), " ~".yellow()),
+            HotReloadMode::Disabled => (crate::i18n::t("disabled").dark_gray(), " ✗".dark_gray()),
         };
         frame.render_widget(
-            Paragraph::new(Line::from(vec!["Hotreload: ".gray(), label, indicator])),
+            Paragraph::new(Line::from(vec![
+                Span::raw(crate::i18n::t_pad("Hotreload: ")).gray(),
+                label,
+                indicator,
+            ])),
             hotreload_mode,
         );
 
@@ -746,11 +760,14 @@ impl Output {
                     .unwrap_or_default()
             )
             .blue(),
-            None => "no server address".dark_gray(),
+            None => crate::i18n::t("no server address").dark_gray(),
         };
 
         frame.render_widget_ref(
-            Paragraph::new(Line::from(vec!["Address:  ".gray(), address])),
+            Paragraph::new(Line::from(vec![
+                Span::raw(crate::i18n::t_pad("Address:  ")).gray(),
+                address,
+            ])),
             serve_address,
         );
     }
@@ -758,7 +775,10 @@ impl Output {
     fn render_feature_list(&self, frame: &mut Frame<'_>, area: Rect, state: RenderState) {
         frame.render_widget(
             Paragraph::new(Line::from({
-                let mut lines = vec!["Features: ".gray(), "[".yellow()];
+                let mut lines = vec![
+                    Span::raw(crate::i18n::t_pad("Features: ")).gray(),
+                    "[".yellow(),
+                ];
 
                 let feature_list: Vec<String> = state.runner.client().build.all_target_features();
                 let num_features = feature_list.len();
@@ -800,14 +820,14 @@ impl Output {
 
         frame.render_widget(
             Paragraph::new(Line::from(vec![
-                "dx version: ".gray(),
+                Span::raw(crate::i18n::t_pad("dx version: ")).gray(),
                 self.dx_version.as_str().yellow(),
             ])),
             meta_list[1],
         );
         frame.render_widget(
             Paragraph::new(Line::from(vec![
-                "rustc: ".gray(),
+                Span::raw(crate::i18n::t_pad("rustc: ")).gray(),
                 state.runner.workspace.rustc_version.as_str().yellow(),
             ])),
             meta_list[2],
@@ -823,7 +843,7 @@ impl Output {
         if state.runner.client.build.using_dioxus_explicitly {
             frame.render_widget(
                 Paragraph::new(Line::from(vec![
-                    "Read the docs: ".gray(),
+                    Span::raw(crate::i18n::t_pad("Read the docs: ")).gray(),
                     "https://dioxuslabs.com/learn/0.7/".blue(),
                 ])),
                 links_list[0],
@@ -831,7 +851,7 @@ impl Output {
 
             frame.render_widget(
                 Paragraph::new(Line::from(vec![
-                    "Video tutorials: ".gray(),
+                    Span::raw(crate::i18n::t_pad("Video tutorials: ")).gray(),
                     "https://youtube.com/@DioxusLabs".blue(),
                 ])),
                 links_list[1],
@@ -840,14 +860,14 @@ impl Output {
 
         let cmds = [
             "",
-            "r: rebuild the app",
-            "o: open the app",
-            "p: cycle hotreload mode",
-            "v: toggle verbose logs",
-            "t: toggle tracing logs",
-            "c: clear the screen",
-            "d: attach debugger",
-            "/: toggle more commands",
+            crate::i18n::t("r: rebuild the app"),
+            crate::i18n::t("o: open the app"),
+            crate::i18n::t("p: cycle hotreload mode"),
+            crate::i18n::t("v: toggle verbose logs"),
+            crate::i18n::t("t: toggle tracing logs"),
+            crate::i18n::t("c: clear the screen"),
+            crate::i18n::t("d: attach debugger"),
+            crate::i18n::t("/: toggle more commands"),
         ];
         let layout: [_; 9] = Layout::vertical(cmds.iter().map(|_| Constraint::Length(1)))
             .horizontal_margin(1)
@@ -928,7 +948,11 @@ impl Output {
             .iter()
             .map(|line| {
                 // Very important to strip ansi codes before counting graphemes - the ansi codes count as multiple graphemes!
-                let grapheme_count = console::strip_ansi_codes(line).graphemes(true).count();
+                let grapheme_count = if crate::i18n::is_ko() {
+                    crate::i18n::display_width(&console::strip_ansi_codes(line))
+                } else {
+                    console::strip_ansi_codes(line).graphemes(true).count()
+                };
                 grapheme_count.max(1).div_ceil(term_size.width as usize) as u16
             })
             .sum::<u16>();
@@ -1008,7 +1032,13 @@ impl Output {
 
         let rendered = match log.content {
             TraceContent::Cargo(msg) => msg.rendered.unwrap_or_default(),
-            TraceContent::Text(text) => text,
+            TraceContent::Text(text) => match log.source {
+                TraceSrc::App(_) | TraceSrc::Cargo => text,
+                _ => match crate::i18n::fmt::tr_text_tail(&text) {
+                    std::borrow::Cow::Owned(s) => s,
+                    std::borrow::Cow::Borrowed(_) => text,
+                },
+            },
         };
 
         let mut lines = vec![];
@@ -1090,12 +1120,19 @@ impl Output {
                 TraceContent::Text(s) => s.as_str(),
                 TraceContent::Cargo(d) => d.message.as_str(),
             };
-            match log.level {
+            let emit = || match log.level {
                 Level::ERROR => tracing::error!("{msg}"),
                 Level::WARN => tracing::warn!("{msg}"),
                 Level::INFO => tracing::info!("{msg}"),
                 Level::DEBUG => tracing::debug!("{msg}"),
                 Level::TRACE => tracing::trace!("{msg}"),
+            };
+            if matches!(log.content, TraceContent::Cargo(_))
+                || matches!(log.source, TraceSrc::App(_) | TraceSrc::Cargo)
+            {
+                crate::i18n::fmt::untranslated(emit)
+            } else {
+                emit()
             }
         }
     }
