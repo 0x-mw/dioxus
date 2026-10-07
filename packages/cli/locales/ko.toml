@@ -6569,3 +6569,59 @@ ko = "mkcert 인증서를 생성하는 중 오류가 발생했습니다: {1}"
 [[text]]
 en = "failed to generate mkcert certificates"
 ko = "mkcert 인증서를 생성하지 못했습니다"
+
+# src: web/src/devtools.rs (dev toast)
+[[text]]
+en = "Your app is being rebuilt."
+ko = "앱을 다시 빌드하는 중입니다."
+
+# src: web/src/devtools.rs (dev toast)
+[[text]]
+en = "A non-hot-reloadable change occurred and we must rebuild."
+ko = "핫 리로드할 수 없는 변경이 있어 다시 빌드합니다."
+
+# src: web/src/devtools.rs (dev toast)
+[[text]]
+en = "Hot-patching app..."
+ko = "앱을 핫 패치하는 중..."
+
+# src: web/src/devtools.rs (dev toast)
+[[text]]
+en = "Hot-patching modified Rust code."
+ko = "수정된 Rust 코드를 핫 패치합니다."
+
+# src: web/src/devtools.rs (dev toast)
+[[text]]
+en = "Oops! The build failed."
+ko = "이런! 빌드에 실패했습니다."
+
+# src: web/src/devtools.rs (dev toast)
+[[text]]
+en = "We tried to rebuild your app, but something went wrong."
+ko = "앱을 다시 빌드하려 했지만 문제가 생겼습니다."
+
+# src: web/src/devtools.rs (dev toast)
+[[text]]
+en = "Successfully rebuilt."
+ko = "다시 빌드했습니다."
+
+# src: web/src/devtools.rs (dev toast)
+[[text]]
+en = "Your app was rebuilt successfully and without error."
+ko = "앱을 오류 없이 다시 빌드했습니다."
+
+# src: web/src/devtools.rs (dev toast)
+[[text]]
+en = "App panicked! See console for details."
+ko = "앱에서 패닉이 발생했습니다! 자세한 내용은 콘솔을 확인하십시오."
+
+# src: web/src/lib.rs (hot-patch toast)
+[[text]]
+en = "Hot-patch success!"
+ko = "핫 패치 성공!"
+
+# 값: {1}=ms_elapsed
+# src: web/src/lib.rs (hot-patch toast)
+[[fmt]]
+en = "App successfully patched in {} ms"
+ko = "앱을 {1}ms 만에 핫 패치했습니다"

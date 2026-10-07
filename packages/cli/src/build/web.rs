@@ -395,6 +395,11 @@ __wbg_init({{module_or_path: "/{}/{wasm_path}"}}).then((wasm) => {{
             std::fs::read_to_string(custom_html_file).unwrap_or_else(|_| String::from(default_html))
         };
 
+        // 개발용 HTML 의 재빌드 토스트 문구를 한국어화한다(DX_LANG=en 이면 바이트 동일).
+        if !self.release {
+            crate::i18n::web::localize_dev_html(&mut html);
+        }
+
         // Inject any resources from the config into the html
         self.inject_resources(assets, &mut html)?;
 

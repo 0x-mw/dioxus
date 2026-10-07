@@ -1604,6 +1604,18 @@ RUNTIME_KEYS = [
     ("Verbose logging is now off", "text", "T5", ("serve/output.rs", "Verbose/Tracing toggle")),
     ("Tracing is now on", "text", "T5", ("serve/output.rs", "Verbose/Tracing toggle")),
     ("Tracing is now off", "text", "T5", ("serve/output.rs", "Verbose/Tracing toggle")),
+    # 웹 런타임(web/src/devtools.rs)의 재빌드 토스트: dx 가 개발 HTML 에 끼운 스크립트가 번역한다(i18n/web.rs)
+    ("Your app is being rebuilt.", "text", "T5", ("web/src/devtools.rs", "dev toast")),
+    ("A non-hot-reloadable change occurred and we must rebuild.", "text", "T5", ("web/src/devtools.rs", "dev toast")),
+    ("Hot-patching app...", "text", "T5", ("web/src/devtools.rs", "dev toast")),
+    ("Hot-patching modified Rust code.", "text", "T5", ("web/src/devtools.rs", "dev toast")),
+    ("Oops! The build failed.", "text", "T5", ("web/src/devtools.rs", "dev toast")),
+    ("We tried to rebuild your app, but something went wrong.", "text", "T5", ("web/src/devtools.rs", "dev toast")),
+    ("Successfully rebuilt.", "text", "T5", ("web/src/devtools.rs", "dev toast")),
+    ("Your app was rebuilt successfully and without error.", "text", "T5", ("web/src/devtools.rs", "dev toast")),
+    ("App panicked! See console for details.", "text", "T5", ("web/src/devtools.rs", "dev toast")),
+    ("Hot-patch success!", "text", "T5", ("web/src/lib.rs", "hot-patch toast")),
+    ("App successfully patched in {} ms", "fmt", "T5", ("web/src/lib.rs", "hot-patch toast")),
 ]
 
 

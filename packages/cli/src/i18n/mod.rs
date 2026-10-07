@@ -13,6 +13,7 @@ use serde::Deserialize;
 pub(crate) mod clap;
 pub(crate) mod fmt;
 mod matcher;
+pub(crate) mod web;
 
 use matcher::{
     MIN_LITERAL_ALPHA, MIN_OPEN_LITERAL_LEN, Pattern, Template, parse_ko_template, parse_rust_fmt,
