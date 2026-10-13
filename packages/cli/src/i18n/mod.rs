@@ -1162,4 +1162,56 @@ ko = "{1} 근처에서 찾았습니다"
         let (_, errs) = Table::parse(KO_SRC);
         assert!(errs.is_empty(), "ko.toml errors: {errs:#?}");
     }
+
+    /// serve/runner.rs 의 설정 변경 알림은 detail 값까지 번역된다(더 구체적인 합성 키가 일반 틀을 이긴다).
+    #[test]
+    fn config_change_details_are_translated() {
+        use crate::styles::{HINT_STYLE, NOTE_STYLE};
+        let (ko, _) = Table::parse(KO_SRC);
+        let file = "Cargo.toml";
+        let full = |subject: &str, detail: &str| {
+            format!(
+                "Full rebuild: {NOTE_STYLE}{subject}{NOTE_STYLE:#} {detail} {HINT_STYLE}({file}){HINT_STYLE:#}"
+            )
+        };
+        let warn = |subject: &str, detail: &str| {
+            format!(
+                "{NOTE_STYLE}{subject}{NOTE_STYLE:#} {detail} {HINT_STYLE}({file}){HINT_STYLE:#}"
+            )
+        };
+        let members = "changed (note: source files in newly-added workspace members won't be hot-reloaded until you restart `dx serve`)";
+        for (line, want) in [
+            (full("Cargo.toml [dependencies]", "changed"), "변경됨"),
+            (
+                full("Cargo.toml [target.*]", "dependencies changed"),
+                "의존성 변경됨",
+            ),
+            (
+                full("Cargo.toml [profile]", "section added or removed"),
+                "섹션 추가 또는 삭제됨",
+            ),
+            (
+                full("Cargo.toml [workspace].members", members),
+                "핫 리로드되지 않습니다",
+            ),
+            (
+                warn(
+                    "Dioxus.toml [web.proxy]",
+                    "changed — restart `dx serve` to apply.",
+                ),
+                "다시 시작하십시오",
+            ),
+        ] {
+            let out = ko.tr_line(&line);
+            assert!(out.contains(want), "{line:?} -> {out:?}");
+            assert!(
+                !out.contains("changed") && !out.contains("removed"),
+                "{out:?}"
+            );
+            assert!(
+                out.contains(&format!("{HINT_STYLE}({file}){HINT_STYLE:#}")),
+                "{out:?}"
+            );
+        }
+    }
 }

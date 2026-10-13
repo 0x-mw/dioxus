@@ -1621,6 +1621,12 @@ RUNTIME_KEYS = [
     ("One sec!", "text", "T5", ("cli/assets/web/dev.loading.html", "loading page")),
     ("We're building your app now.", "text", "T5", ("cli/assets/web/dev.loading.html", "loading page")),
     ("compiling {} encountered an error:", "fmt", "T5", ("cli/assets/web/dev.loading.html", "loading page")),
+    # serve/runner.rs 의 설정 변경 알림: detail 값("changed" 등)이 고정 문구 몇 가지뿐이라 값을 넣은 줄 전체를 키로 둔다
+    ("Full rebuild: {NOTE_STYLE}{subject}{NOTE_STYLE:#} changed {HINT_STYLE}({display_file}){HINT_STYLE:#}", "fmt", "T5", ("serve/runner.rs", "config change detail")),
+    ("Full rebuild: {NOTE_STYLE}{subject}{NOTE_STYLE:#} dependencies changed {HINT_STYLE}({display_file}){HINT_STYLE:#}", "fmt", "T5", ("serve/runner.rs", "config change detail")),
+    ("Full rebuild: {NOTE_STYLE}{subject}{NOTE_STYLE:#} section added or removed {HINT_STYLE}({display_file}){HINT_STYLE:#}", "fmt", "T5", ("serve/runner.rs", "config change detail")),
+    ("Full rebuild: {NOTE_STYLE}{subject}{NOTE_STYLE:#} changed (note: source files in newly-added workspace members won't be hot-reloaded until you restart `dx serve`) {HINT_STYLE}({display_file}){HINT_STYLE:#}", "fmt", "T5", ("serve/runner.rs", "config change detail")),
+    ("{NOTE_STYLE}{subject}{NOTE_STYLE:#} changed — restart `dx serve` to apply. {HINT_STYLE}({display_file}){HINT_STYLE:#}", "fmt", "T5", ("serve/runner.rs", "config change detail")),
 ]
 
 

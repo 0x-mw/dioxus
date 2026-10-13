@@ -6646,3 +6646,33 @@ ko = "지금 앱을 빌드하고 있습니다."
 [[fmt]]
 en = "compiling {} encountered an error:"
 ko = "{1} 컴파일 중 오류가 발생했습니다:"
+
+# 값: {1}={NOTE_STYLE}{subject}{NOTE_STYLE:#}  {2}={HINT_STYLE}  {3}={display_file}  {4}={HINT_STYLE:#}
+# src: serve/runner.rs (config change detail)
+[[fmt]]
+en = "Full rebuild: {NOTE_STYLE}{subject}{NOTE_STYLE:#} changed {HINT_STYLE}({display_file}){HINT_STYLE:#}"
+ko = "전체 빌드 다시 실행: {1} 변경됨 {2}({3}){4}"
+
+# 값: {1}={NOTE_STYLE}{subject}{NOTE_STYLE:#}  {2}={HINT_STYLE}  {3}={display_file}  {4}={HINT_STYLE:#}
+# src: serve/runner.rs (config change detail)
+[[fmt]]
+en = "Full rebuild: {NOTE_STYLE}{subject}{NOTE_STYLE:#} dependencies changed {HINT_STYLE}({display_file}){HINT_STYLE:#}"
+ko = "전체 빌드 다시 실행: {1} 의존성 변경됨 {2}({3}){4}"
+
+# 값: {1}={NOTE_STYLE}{subject}{NOTE_STYLE:#}  {2}={HINT_STYLE}  {3}={display_file}  {4}={HINT_STYLE:#}
+# src: serve/runner.rs (config change detail)
+[[fmt]]
+en = "Full rebuild: {NOTE_STYLE}{subject}{NOTE_STYLE:#} section added or removed {HINT_STYLE}({display_file}){HINT_STYLE:#}"
+ko = "전체 빌드 다시 실행: {1} 섹션 추가 또는 삭제됨 {2}({3}){4}"
+
+# 값: {1}={NOTE_STYLE}{subject}{NOTE_STYLE:#}  {2}={HINT_STYLE}  {3}={display_file}  {4}={HINT_STYLE:#}
+# src: serve/runner.rs (config change detail)
+[[fmt]]
+en = "Full rebuild: {NOTE_STYLE}{subject}{NOTE_STYLE:#} changed (note: source files in newly-added workspace members won't be hot-reloaded until you restart `dx serve`) {HINT_STYLE}({display_file}){HINT_STYLE:#}"
+ko = "전체 빌드 다시 실행: {1} 변경됨 (참고: 새로 추가한 워크스페이스 멤버의 소스 파일은 `dx serve` 를 다시 시작할 때까지 핫 리로드되지 않습니다) {2}({3}){4}"
+
+# 값: {1}={NOTE_STYLE}{subject}{NOTE_STYLE:#}  {2}={HINT_STYLE}  {3}={display_file}  {4}={HINT_STYLE:#}
+# src: serve/runner.rs (config change detail)
+[[fmt]]
+en = "{NOTE_STYLE}{subject}{NOTE_STYLE:#} changed — restart `dx serve` to apply. {HINT_STYLE}({display_file}){HINT_STYLE:#}"
+ko = "{1} 변경됨 — 적용하려면 `dx serve` 를 다시 시작하십시오. {2}({3}){4}"
