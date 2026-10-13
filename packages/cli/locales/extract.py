@@ -4,7 +4,7 @@
 
 소스(packages/cli/src/**/*.rs)에서 사람이 보는 영어 메시지를 뽑아 번역표와 비교한다.
 명령: scan / skeleton / merge / check / check-part / selftest   (자세한 사용법: `extract.py --help`)
-규칙의 정본은 docs/task-id/ko-i18n/plan.md §2.3·§5.1·§15 이고, 포크 안내서는 locales/README.md.
+번역표 규칙은 ko.toml 머리 주석과 포크 안내서 locales/README.md 4·5절, 문체·용어는 locales/glossary.md.
 
 도움말 키 덤프 형식(`--help-keys`; Rust 테스트 i18n::clap::tests::dump_help_keys 가 만든다):
 번역표와 같은 스키마([[text]]/[[fmt]], ko = "")에 항목마다 주석 두 줄을 단다.
@@ -1124,7 +1124,7 @@ class Analysis:
                         cs, si = self.group_fmt(c[1], name, scan_first_str=True)
                         if si is not None:
                             claimed.add(si)
-                            head = re.split(r"\{", t[si].v, 1)[0].strip().rstrip(":").strip()
+                            head = re.split(r"\{", t[si].v, maxsplit=1)[0].strip().rstrip(":").strip()
                             if head:
                                 cands.append(Cand(self.rel, t[si].line, "text", head,
                                                   name, "", si))

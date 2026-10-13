@@ -60,7 +60,7 @@ ko = "{2}에서 {1}을(를) 읽지 못했습니다"
 - 같은 `en` 이 두 번 나오면(종류 무관) 오류입니다.
 - `ko = en`(항등)은 번역이 필요 없는 문구로 처리를 마쳤다는 표시이고, `ko = ""` 는 아직 번역하지 않았다는 표시(건너뜀)입니다.
 
-문체와 용어(`docs/task-id/ko-i18n/glossary.md` 요약):
+문체와 용어(전체 지침은 `packages/cli/locales/glossary.md`, 아래는 요약):
 
 - 합니다체로 통일합니다. `Failed to X` 는 "X하지 못했습니다", `X not found` 는 "X을(를) 찾을 수 없습니다", 진행 표시는 "빌드하는 중..." 처럼 씁니다.
 - 명령·옵션 이름, 경로, 코드, 플랫폼 이름(web, desktop, iOS, Android 등)은 영어로 둡니다.
@@ -115,7 +115,7 @@ DX_I18N_DUMP=/tmp/help-keys.txt cargo test -p dioxus-cli --bin dx \
   i18n::clap::tests::dump_help_keys -- --ignored --exact
 ```
 
-빌드 산출물을 C: 드라이브(Windows 파일시스템)에 쌓지 않으려면 `CARGO_TARGET_DIR=/home/mw/.cache/dioxus-target` 를 앞에 붙입니다.
+저장소가 WSL 의 Windows 파일시스템(`/mnt/c`, `/mnt/d` 등)에 있으면 빌드가 느리고 산출물이 Windows 드라이브에 쌓이므로, `CARGO_TARGET_DIR=$HOME/.cache/dioxus-target` 처럼 리눅스 파일시스템 경로를 앞에 붙입니다.
 
 허용목록 `packages/cli/locales/extract_allow.txt` 는 `scan --unclassified` 게이트에서 "화면 메시지가 아닌 것"을 걸러 내는 목록입니다. HTML·JS·CSS 템플릿, 셸·cargo 인자, 경로, 생성 파일 내용, 텔레메트리·내부 식별자, debug 전용 문자열, 기계 출력만 담습니다. 항목마다 끝에 ` ## 범주: 사유` 가 필수입니다. 원칙은 사람에게 보이는 메시지는 숨기지 않는다는 것입니다. 새 문구가 걸리면 허용목록에 넣지 말고 번역표에 추가하거나 `extract.py` 의 추출 규칙을 고칩니다.
 
@@ -128,13 +128,19 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 rustup target add wasm32-unknown-unknown
 ```
 
+리눅스(WSL 포함)에는 C 링커와 OpenSSL 개발 파일도 필요합니다. 새로 설치한 Ubuntu 에는 `cc` 가 없어 링크 단계에서 실패하므로 먼저 설치합니다.
+
+```bash
+sudo apt install -y build-essential pkg-config libssl-dev
+```
+
 설치와 재설치는 같은 명령입니다.
 
 ```bash
 cargo install --path packages/cli --locked --force
 ```
 
-`pkg-config` 가 없는 WSL 에서는 openssl-sys 가 실패하므로 환경 변수를 붙입니다.
+`pkg-config` 를 설치할 수 없는 환경에서는 openssl-sys 가 실패하므로 환경 변수를 붙입니다(`libssl-dev` 는 있어야 합니다).
 
 ```bash
 OPENSSL_LIB_DIR=/usr/lib/x86_64-linux-gnu OPENSSL_INCLUDE_DIR=/usr/include \
@@ -174,11 +180,13 @@ git checkout ko-kr && git merge main
 - `packages/cli/src/cli/run.rs`
 - `packages/cli/src/cli/doctor.rs`
 - `packages/cli/src/workspace.rs`
+- `packages/cli/src/main.rs`
 - `packages/cli/src/cli/create.rs`
 - `packages/cli/src/check/issues.rs`
 - `packages/cli/src/cli/component.rs`
 - `packages/cli/src/cli/autoformat.rs`
 - `packages/cli/src/cli/bundle.rs`
+- `packages/cli/src/build/web.rs`
 - `packages/cli/Cargo.toml`
 
 merge 가 끝나면 새로 생기거나 바뀐 문구를 확인하고 번역을 보충합니다.
