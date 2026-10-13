@@ -755,7 +755,10 @@ async fn build_status_middleware(
     if let Some(true) = accepts_html {
         let status = state.get();
         if status != Status::Ready {
-            let html = include_str!("../../assets/web/dev.loading.html");
+            // 첫 빌드 로딩 화면의 문구를 한국어화한다(DX_LANG=en 이면 원문 그대로).
+            let html = crate::i18n::web::localize_loading_html(include_str!(
+                "../../assets/web/dev.loading.html"
+            ));
             return axum::response::Response::builder()
                 .status(StatusCode::OK)
                 // Load the html loader then keep loading forever

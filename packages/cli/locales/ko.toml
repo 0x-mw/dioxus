@@ -6625,3 +6625,24 @@ ko = "핫 패치 성공!"
 [[fmt]]
 en = "App successfully patched in {} ms"
 ko = "앱을 {1}ms 만에 핫 패치했습니다"
+
+# src: cli/assets/web/dev.loading.html (loading page)
+[[text]]
+en = "Dioxus Build"
+ko = "Dioxus 빌드"
+
+# src: cli/assets/web/dev.loading.html (loading page)
+[[text]]
+en = "One sec!"
+ko = "잠시만 기다려 주십시오!"
+
+# src: cli/assets/web/dev.loading.html (loading page)
+[[text]]
+en = "We're building your app now."
+ko = "지금 앱을 빌드하고 있습니다."
+
+# 값: {1}=APPLICATION_NAME
+# src: cli/assets/web/dev.loading.html (loading page)
+[[fmt]]
+en = "compiling {} encountered an error:"
+ko = "{1} 컴파일 중 오류가 발생했습니다:"

@@ -32,9 +32,11 @@ unset DX_LANG                          # 다시 한국어
 - `dx new` 의 템플릿 질문: 외부 저장소(dioxus-template, cargo-generate)가 내는 문구입니다.
 - clap 이 만드는 내장 문구 중 일부, 특히 줄바꿈으로 잘려 한 줄에 다 들어오지 않는 도움말 문구.
 - 번역표에 아직 없는 새 upstream 문구(영어로 폴백).
-- 웹 개발 화면 중 첫 빌드 때의 로딩 화면, 그리고 데스크톱 앱 개발 중 뜨는 알림(앱 런타임 안에 있어 dx 가 바꿀 수 없음).
+- 종료 오류의 머리 `ERROR dx <명령>:` (로그 수준 표기 `INFO`·`WARN`·`ERROR` 와 맞춰 영어로 두고, 뒤의 오류 본문만 번역합니다).
+- 값으로 시작하거나 끝나면서 고정 글자가 7자 이하인 짧은 문구(`from {..}`, `xcrun: {..}` 등): 다른 줄을 잘못 번역할 위험이 있어 번역표 로더가 받지 않습니다.
+- 데스크톱 앱 개발 중 뜨는 알림(앱 런타임 `packages/desktop` 안에 있어 dx 가 바꿀 수 없음), 첫 빌드 로딩 화면 아래쪽의 링크 이름(docs·guides·help), 컴파일 오류 본문.
 
-참고: `dx serve` 웹 개발 중 브라우저에 뜨는 재빌드·핫 패치·빌드 실패·패닉 알림은 번역됩니다. 앱 런타임은 영어로 알림을 보내고, dx 가 개발용 HTML 에 넣은 작은 스크립트(`src/i18n/web.rs`)가 표시 직전에 번역표로 바꿉니다. `DX_LANG=en` 이거나 릴리스 빌드면 이 스크립트를 넣지 않습니다.
+참고: `dx serve` 웹 개발 중 브라우저에 뜨는 재빌드·핫 패치·빌드 실패·패닉 알림과, 첫 빌드 동안 보이는 로딩 화면(제목·진행 문구·빌드 실패 문장)은 번역됩니다. 앱 런타임과 빌드 상태 웹소켓은 영어 그대로 두고, dx 가 개발용 HTML 과 로딩 화면에 넣은 작은 스크립트(`src/i18n/web.rs`)가 표시 직전에 번역표로 바꿉니다. `DX_LANG=en` 이거나 릴리스 빌드면 이 스크립트를 넣지 않습니다.
 
 ## 4. 번역표 고치기
 
@@ -187,6 +189,7 @@ git checkout ko-kr && git merge main
 - `packages/cli/src/cli/autoformat.rs`
 - `packages/cli/src/cli/bundle.rs`
 - `packages/cli/src/build/web.rs`
+- `packages/cli/src/serve/server.rs`
 - `packages/cli/Cargo.toml`
 
 merge 가 끝나면 새로 생기거나 바뀐 문구를 확인하고 번역을 보충합니다.

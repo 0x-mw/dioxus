@@ -1616,6 +1616,11 @@ RUNTIME_KEYS = [
     ("App panicked! See console for details.", "text", "T5", ("web/src/devtools.rs", "dev toast")),
     ("Hot-patch success!", "text", "T5", ("web/src/lib.rs", "hot-patch toast")),
     ("App successfully patched in {} ms", "fmt", "T5", ("web/src/lib.rs", "hot-patch toast")),
+    # dx 가 첫 빌드 동안 내주는 로딩 화면: i18n/web.rs 가 HTML 고정 문구와 끼운 스크립트로 번역한다
+    ("Dioxus Build", "text", "T5", ("cli/assets/web/dev.loading.html", "loading page")),
+    ("One sec!", "text", "T5", ("cli/assets/web/dev.loading.html", "loading page")),
+    ("We're building your app now.", "text", "T5", ("cli/assets/web/dev.loading.html", "loading page")),
+    ("compiling {} encountered an error:", "fmt", "T5", ("cli/assets/web/dev.loading.html", "loading page")),
 ]
 
 
